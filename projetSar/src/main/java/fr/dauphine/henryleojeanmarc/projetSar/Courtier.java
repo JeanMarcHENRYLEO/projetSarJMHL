@@ -16,7 +16,13 @@ public class Courtier {
 		taux=t;
 		espece=e;
 	}
-	
 	public void execute(Commande c){
+	}
+	
+	public void executeList(){
+		for(Commande c : Comm){
+			execute(c);
+			//todo : wait until the receipt from the market
+		}
 	}
 }
