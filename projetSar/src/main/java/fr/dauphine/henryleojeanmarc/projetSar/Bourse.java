@@ -1,11 +1,14 @@
 package fr.dauphine.henryleojeanmarc.projetSar;
 
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Bourse {
+public class Bourse extends Thread implements BourseInterface{
 	List<Societe> SocieteList= new ArrayList<Societe>();
 	List<Courtier> CourtierList= new ArrayList<Courtier>();
 	//List<Commande> CommandeList= new ArrayList<Commande>();
@@ -25,6 +28,38 @@ public class Bourse {
 		for(Courtier s:CourtierList){
 			System.out.println(s);
 		}
+	}
+	
+	public void run(){
+		int port=5000;
+		ServerSocket se;
+		Socket ssv=null;
+		
+			try{
+				se = new ServerSocket(port); // socket d'écoute
+				System.out.println("Serveur ecoute");
+				
+				 while(true){ 
+					ssv = se.accept(); 
+					System.out.println("Connexion accpetée par le client ");
+					//ThreadClient th =new ThreadClient(ssv); // on donne la socket ssv
+				}
+									
+			}
+			
+			catch (IOException e){
+				System.err.println("Erreur : " +e);
+			}
+			
+			finally{
+				
+				try{
+					ssv.close();
+				}
+				
+				catch (IOException e){}
+		    }
+		
 	}
 
 }
