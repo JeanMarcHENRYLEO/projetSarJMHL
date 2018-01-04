@@ -28,7 +28,7 @@ public class Client extends Thread{
         try {
             this.hote = InetAddress.getLocalHost();
         } catch (UnknownHostException e) {
-            e.printStackTrace();
+            System.err.println("Impossible d'initialiser le hote");
         }
     }
 
@@ -54,7 +54,7 @@ public class Client extends Thread{
 
         try {
             reponse = in.readLine();
-            System.out.println("reponse: " + reponse);
+            System.out.println(reponse);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -63,6 +63,8 @@ public class Client extends Thread{
             socket.close();
             in.close();
             out.close();
+
+            System.out.println("les flux ont été fermés");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -78,16 +80,10 @@ public class Client extends Thread{
 
         List<Client> clients = new ArrayList<>();
 
-        clients.add(new Client("Stephane", 4040));
-        clients.add(new Client("Serget", 5050));
-        clients.add(new Client("Liza", 4040));
-        clients.add(new Client("Tatiana", 5050));
-        clients.add(new Client("Maria", 4040));
+        clients.add(new Client("JeanMarc", 4040));
 
         for (Client client: clients)
             client.start();
-
-
     }
 }
 

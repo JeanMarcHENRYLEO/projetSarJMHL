@@ -28,7 +28,7 @@
 			<configuration>
 				<archive>
 					<manifest>
-						<mainClass>fr.dauphine.henryleojeanmarc.projetSar.App</mainClass>
+						<mainClass>fr.dauphine.henryleojeanmarc.projetSar.Bourse</mainClass>
 						<addClasspath>true</addClasspath>
 						<classpathPrefix>lib</classpathPrefix>
 					</manifest>
