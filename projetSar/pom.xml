@@ -4,7 +4,7 @@
   <groupId>fr.dauphine.henryleojeanmarc.projetSar</groupId>
   <artifactId>projetSar</artifactId>
   <packaging>jar</packaging>
-  <version>1.0-SNAPSHOT</version>
+  <version>1.0</version>
   <name>projetSar</name>
   <url>http://maven.apache.org</url>
   <dependencies>

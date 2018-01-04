@@ -1,13 +1,18 @@
 package fr.dauphine.henryleojeanmarc.projetSar;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Client {
-	String nom;
-	public Client(String n){
-		nom=n;
+	private String nom;
+
+	public Client(String nom){
+		this.nom = nom;
 	}
+
+
 	@Override
 	public String toString() {
-		// TODO Auto-generated method stub
 		return nom;
 	}
 }

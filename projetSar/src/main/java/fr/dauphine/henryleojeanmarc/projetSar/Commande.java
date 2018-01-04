@@ -1,5 +1,5 @@
 package fr.dauphine.henryleojeanmarc.projetSar;
 
-public abstract class Commande {
+public abstract class Commande{
 
 }

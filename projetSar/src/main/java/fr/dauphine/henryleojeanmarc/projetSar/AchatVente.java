@@ -1,7 +1,6 @@
 package fr.dauphine.henryleojeanmarc.projetSar;
 
 public interface AchatVente {
-	public void acheter(double montant);
-	
-	public void vendre(double montant);
+	void acheter(double montant);
+	void vendre(double montant);
 }

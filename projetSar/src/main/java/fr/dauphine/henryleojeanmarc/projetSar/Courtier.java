@@ -1,30 +1,50 @@
 package fr.dauphine.henryleojeanmarc.projetSar;
 
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class Courtier extends Thread {
-	List<Client> clientList= new ArrayList<Client>();
-	String nom;
-	List<Commande> CommList= new ArrayList<Commande>();
-	double taux;
-	double espece;
-	public Courtier(String name,double t, double e){
-		nom=name;
-		taux=t;
-		espece=e;
+	private String nom;
+    private double taux;
+    private double espece;
+
+	List<Commande> commandeList;
+    List<Client> clientList;
+
+    private int port;
+    private ServerSocket serverSocket = null;
+    private Socket socket = null;
+
+    /**
+     *
+     * @param nom - un nom unique
+     * @param taux - le taux de commission
+     * @param espece - le montant d'argent que le courtier a gagné
+     */
+	public Courtier(String nom,double taux, double espece){
+		this.nom = nom;
+		this.taux = taux;
+		this.espece = espece;
 		clientList.add(new Client("Moore"));
+
+		commandeList = new ArrayList<Commande>();
+		clientList = new ArrayList<Client>();
 	}
 	
-	public void addCommande(Commande c){
-		CommList.add(c);
+	public void addCommande(Client client, Commande commande){
+        commandeList.add(commande);
 	}
-	public void execute(Commande c){
+
+	public void execute(Commande commande){
 	}
 	
 	public void executeList(){
-		for(Commande c : CommList){
-			execute(c);
+		for(Commande commande: commandeList){
+			execute(commande);
+
 			//todo : wait until the receipt from the market
 		}
 	}
@@ -33,14 +53,15 @@ public class Courtier extends Thread {
 		clientList.add(c);
 	}
 	
-	public void AffClient(){
+	public void afficherClientList(){
 		for(Client c : clientList){
-			System.out.println(c);
+			System.out.print(c + ";");
 		}
+		System.out.println();
 	}
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub
-		return nom+": taux : "+taux+" / espece :"+espece;
+        return "nom: " + nom + "/nombreClient:" + clientList.size();
 	}
 }
