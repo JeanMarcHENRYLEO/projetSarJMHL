@@ -19,12 +19,12 @@ public class Bourse extends Thread implements BourseInterface{
 		CourtierList.add(new Courtier("gecko", 10, 50000));
 	}
 	
-	public void AffListSociete(){
+	public void afficherListSociete(){
 		for(Societe s:SocieteList){
 			System.out.println(s);
 		}
 	}
-	public void AffListCoutier(){
+	public void afficherListCourtier(){
 		for(Courtier s:CourtierList){
 			System.out.println(s);
 		}
@@ -36,12 +36,12 @@ public class Bourse extends Thread implements BourseInterface{
 		Socket ssv=null;
 		
 			try{
-				se = new ServerSocket(port); // socket d'écoute
+				se = new ServerSocket(port); // socket d'ï¿½coute
 				System.out.println("Serveur ecoute");
 				
 				 while(true){ 
 					ssv = se.accept(); 
-					System.out.println("Connexion accpetée par le client ");
+					System.out.println("Connexion accpetï¿½e par le client ");
 					//ThreadClient th =new ThreadClient(ssv); // on donne la socket ssv
 				}
 									
