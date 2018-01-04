@@ -66,12 +66,12 @@ public class Bourse extends Thread implements BourseInterface{
 		Socket ssv=null;
 		
 			try{
-				se = new ServerSocket(port); // socket d'écoute
+				se = new ServerSocket(port); // socket d'ï¿½coute
 				System.out.println("Serveur ecoute");
 				
 				 while(true){ 
 					ssv = se.accept(); 
-					System.out.println("Connexion accpetée par le client ");
+					System.out.println("Connexion accpetï¿½e par le client ");
 					//ThreadClient th =new ThreadClient(ssv); // on donne la socket ssv
 				}
 									
