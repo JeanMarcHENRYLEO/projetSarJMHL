@@ -9,25 +9,55 @@ import java.util.List;
 import java.util.Map;
 
 public class Bourse extends Thread implements BourseInterface{
-	List<Societe> SocieteList= new ArrayList<Societe>();
-	List<Courtier> CourtierList= new ArrayList<Courtier>();
-	//List<Commande> CommandeList= new ArrayList<Commande>();
+	List<Stock> stockList= new ArrayList<Stock>();
+	List<Courtier> courtierList= new ArrayList<Courtier>();
+	List<Commande> CommandeAchatList= new ArrayList<Commande>();
+	List<Commande> CommandeVenteList= new ArrayList<Commande>();
 	//Map<String, List<Commande>> CommandeParEntreprise= new HashMap<String, List<Commande>>();
 	public Bourse(){
-		SocieteList.add(new Societe("Google",10,10000,10000));
+		stockList.add(new Stock("Google",10,10000,10000));
 		
-		CourtierList.add(new Courtier("gecko", 10, 50000));
+		courtierList.add(new Courtier("gecko", 10, 50000));
 	}
 	
 	public void AffListSociete(){
-		for(Societe s:SocieteList){
+		for(Stock s:stockList){
 			System.out.println(s);
 		}
 	}
 	public void AffListCoutier(){
-		for(Courtier s:CourtierList){
+		for(Courtier s:courtierList){
 			System.out.println(s);
 		}
+	}
+	public int AchatStock(Stock s){
+		int res=0;
+		for(Commande c: CommandeAchatList){
+			if(c.getStock().getNom().equals(s.getNom())){
+				res=res+c.getNbAction();
+			}
+		}
+		return res;
+		
+	}
+	
+	public int VenteStock(Stock s){
+		int res=0;
+		for(Commande c: CommandeVenteList){
+			if(c.getStock().getNom().equals(s.getNom())){
+				res=res+c.getNbAction();
+			}
+		}
+		return res;
+		
+	}
+	
+	public void MetAJourPrix(){
+		for(Stock s:stockList){
+			int delta=(AchatStock(s)-VenteStock(s))/s.nbActionTotal;
+			s.setValeur(s.getValeur()*(1+delta));
+		}
+		
 	}
 	
 	public void run(){
@@ -61,5 +91,7 @@ public class Bourse extends Thread implements BourseInterface{
 		    }
 		
 	}
+
+	
 
 }

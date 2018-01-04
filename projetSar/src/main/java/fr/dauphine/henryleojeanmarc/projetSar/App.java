@@ -11,5 +11,6 @@ public class App
     	Bourse Nasdaq = new Bourse();
     	Nasdaq.AffListSociete();
     	Nasdaq.AffListCoutier();
+    	Nasdaq.start();
     }
 }

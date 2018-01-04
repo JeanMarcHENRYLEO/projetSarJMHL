@@ -4,16 +4,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Courtier extends Thread {
+	boolean journeeDebute;
 	List<Client> clientList= new ArrayList<Client>();
 	String nom;
 	List<Commande> CommList= new ArrayList<Commande>();
 	double taux;
 	double espece;
 	public Courtier(String name,double t, double e){
+		journeeDebute=false;
 		nom=name;
 		taux=t;
 		espece=e;
 		clientList.add(new Client("Moore"));
+	}
+	public void ClientConnecte(){
+		journeeDebute=true;
 	}
 	
 	public void addCommande(Commande c){
