@@ -59,10 +59,10 @@ public class Bourse extends Thread {
 		return res;
 	}
 	
-	public void mettreAJourPrix(){
+	synchronized public void mettreAJourPrix(){
 		for(Stock stock: stockList){
-			int delta=(achatStock(stock) - venteStock(stock))/stock.nbActionTotal;
-			stock.setValeur(stock.getValeur()*(1+delta));
+			int delta = (achatStock(stock) - venteStock(stock))/stock.nbActionTotal;
+			stock.setPrix(stock.getPrix() * (1 + delta));
 		}
 	}
 
