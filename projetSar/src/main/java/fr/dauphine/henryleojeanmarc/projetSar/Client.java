@@ -20,7 +20,8 @@ public class Client extends Thread{
     private PrintWriter out = null;
 
     private String requete;
-    private String reponse;
+    private String[] reponse;
+    private String nomCourtier;
 
     public Client(String nom, int port) {
         this.nom = nom;
@@ -48,25 +49,38 @@ public class Client extends Thread{
             e.printStackTrace();
         }
 
-        out.println(nom);
-
         System.out.println("les flux ont été initialisés");
 
         try {
-            reponse = in.readLine();
+            System.out.println("envoi de mon identifiant au courtier");
+            out.println(nom);
+
+            reponse = in.readLine().split(" ");
             System.out.println(reponse);
+
+            nomCourtier = reponse[1];
+
+            if (reponse[0].equals("accept")){
+                System.out.println("le courtier " + nomCourtier + " a accepté ma connexion");
+
+
+            }
+            else {
+                System.out.println("le courtier " + nomCourtier + " a refusé la connexion");
+            }
+
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         try {
-            socket.close();
             in.close();
             out.close();
+            socket.close();
 
-            System.out.println("les flux ont été fermés");
+            System.out.println("les flux associés au client " + this.nom + " ont été fermés");
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("erreur lors de la fermeture des flux de Client");
         }
     }
 

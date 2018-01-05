@@ -44,8 +44,8 @@ public class Courtier extends Thread{
         this.nom = nom;
         this.taux = taux;
         this.espece = 0;
-        commandeList = new ArrayList<>();
-        clientList = new ArrayList<>();
+        this.commandeList = new ArrayList<>();
+        this.clientList = new ArrayList<>();
         this.serverPort = serverPort;
 
         try {
@@ -81,12 +81,11 @@ public class Courtier extends Thread{
                     ThreadClient threadClient = new ThreadClient(socketClient, this);
                     addClient(threadClient);
 
-                    sleep(2500);
+                    sleep(2000);
 
                     this.afficherClientList();
                 }
-            }
-            else
+            } else
                 System.out.println("accés refusé");
 
         } catch (IOException e) {
@@ -99,31 +98,16 @@ public class Courtier extends Thread{
                 socketClient.close();
                 in.close();
                 out.close();
+
+                System.out.println("les flux de courtier " + this.nom + " ont été fermés");
             } catch (IOException e) {
-                e.printStackTrace();
+                System.err.println("erreur lors de la fermeture des flux de Courtiers");
             }
         }
-
     }
-    
-    public void ClientConnecte(){
-		journeeDebute = true;
-	}
 
     public void addCommande(Commande commande) {
         commandeList.add(commande);
-    }
-
-    public void execute(Commande commande) {
-
-    }
-
-    public void executeList(){
-        for(Commande commande: commandeList){
-            execute(commande);
-
-            //todo : wait until the receipt from the market
-        }
     }
 
     public void addClient(ThreadClient threadClient){
@@ -142,7 +126,6 @@ public class Courtier extends Thread{
     }
     @Override
     public String toString() {
-        // TODO Auto-generated method stub
         return "nom: " + nom + "/nombreClient:" + clientList.size();
     }
 
@@ -155,7 +138,6 @@ public class Courtier extends Thread{
         List<Courtier> courtiers = new ArrayList<>();
 
         courtiers.add(new Courtier("Max", 0.01, 4040));
-        //courtiers.add(new Courtier("Yan", 0.05, 5050));
 
         for (Courtier courtier: courtiers)
             courtier.start();

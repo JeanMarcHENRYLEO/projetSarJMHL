@@ -37,15 +37,17 @@ public class ThreadClient extends Thread {
             e.printStackTrace();
         }
 
-        requete = "hello from " + courtier.getNom();
+        requete = "accept " + courtier.getNom();
         out.println(this.getName() + ":" + requete);
 
         try {
             in.close();
             out.close();
             socket.close();
+
+            System.out.println("les flux de ThreadClient " + this.getName() + " ont été fermés");
         } catch (IOException e) {
-            System.err.println("erreur lors de la fermeture des flux");
+            System.err.println("erreur lors de la fermeture des flux de ThreadClient");
         }
     }
 

@@ -38,16 +38,18 @@ public class ThreadCourtier extends Thread {
             e.printStackTrace();
         }
 
-        System.out.println("envoi de l'ACCEPT");
+        System.out.println("envoi de l'accept");
         requete = "accept";
         out.println(requete);
 
-        System.out.println("ACCEPT envoyé");
+        System.out.println("accept envoyé");
 
         try {
             in.close();
             out.close();
             socket.close();
+
+            System.out.println("les flux associés au ThreadCourtier " + this.toString() + " ont été fermés");
         } catch (IOException e) {
             System.err.println("erreur lors de la fermeture des flux");
         }

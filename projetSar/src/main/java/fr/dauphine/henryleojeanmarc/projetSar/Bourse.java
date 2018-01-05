@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Bourse extends Thread{
+public class Bourse extends Thread {
 	private List<Stock> stockList;
 	private List<ThreadCourtier> courtierList;
 	private List<Commande> commandeAchatList;
@@ -18,11 +18,15 @@ public class Bourse extends Thread{
 	private ServerSocket serverSocket = null;
 	private static final int port = 1234;
 
-	public Bourse() {
+	private String nom;
+
+	public Bourse(String nom) {
         stockList = new ArrayList<>();
         courtierList = new ArrayList<>();
         commandeAchatList = new ArrayList<>();
         commandeVenteList = new ArrayList<>();
+
+        this.nom = nom;
 	}
 	
 	public void afficherListStock(){
@@ -69,7 +73,7 @@ public class Bourse extends Thread{
 				
 				 while(true){
 				     socket = serverSocket.accept();
-				     System.out.println("courtier se connecte");
+				     System.out.println("courtier s'est connecté");
 				     ThreadCourtier threadCourtier = new ThreadCourtier(socket, this); // on donne la socket ssv
                      addCourtier(threadCourtier);
 				 }
@@ -78,10 +82,23 @@ public class Bourse extends Thread{
 			} finally {
 				try {
 					socket.close();
-				} catch (IOException e){}
+
+					System.out.println("serversocket de Bourse a été fermé");
+				} catch (IOException e){
+					System.err.println("erreur lors de la fermeture du serversocket de la Bourse");
+				}
 		    }
 		
 	}
+
+	synchronized String afficherListEntreprises() {
+	    String result = "";
+
+	    for (Stock stock: stockList)
+	        result += stock.toString() + "\n";
+
+	    return result;
+    }
 
     public static int getPort() {
         return port;
@@ -93,7 +110,7 @@ public class Bourse extends Thread{
     }
 
     public static void main(String[] args) {
-	    Bourse bourse = new Bourse();
+	    Bourse bourse = new Bourse("CAC40");
 	    bourse.start();
     }
 }

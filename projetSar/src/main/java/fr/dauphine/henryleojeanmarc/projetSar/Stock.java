@@ -4,29 +4,29 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Stock {
-	String nom;
-	double valeur;
+	private String nom;
+	private double prix;
 	int nbActionTotal;
 	int nbActionFlottant;
 	List<Commande>CommandeList=new ArrayList<Commande>();
 	
-	public Stock(String n,double v,int nbAT,int nbAF){
-		nom=n;
-		valeur=v;
-		nbActionTotal=nbAT;
-		nbActionFlottant=nbAF;
+	public Stock(String nom, double prix, int nbAT,int nbAF){
+		this.nom = nom;
+		this.prix = prix;
+		this.nbActionTotal=nbAT;
+		this.nbActionFlottant=nbAF;
 	}
 	
 	public String getNom(){
 		return nom;
 	}
 	
-	public double getValeur() {
-		return valeur;
+	public double getPrix() {
+		return prix;
 	}
 
-	public void setValeur(double valeur) {
-		this.valeur = valeur;
+	public void setPrix(double prix) {
+		this.prix = prix;
 	}
 
 	public int getNbActionFlottant() {
@@ -45,14 +45,22 @@ public class Stock {
 		CommandeList = commandeList;
 	}
 
-	public void addCommande(Commande c){
-		CommandeList.add(c);
+	public Commande getCommande(int i) {
+	    return CommandeList.get(i);
+    }
+
+    public void setCommande(Commande commande) {
+	    this.CommandeList.add(commande);
+    }
+
+	public void addCommande(Commande commande){
+		CommandeList.add(commande);
 	}
 	
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub
-		return nom+": action : "+valeur+"/ ActionTot :"+ nbActionTotal +"/ ActionFlottantes "+ nbActionFlottant;
+		return nom + ": action : " + prix + "/ ActionTot :" + nbActionTotal + "/ ActionFlottantes " + nbActionFlottant;
 	}
 }
 
