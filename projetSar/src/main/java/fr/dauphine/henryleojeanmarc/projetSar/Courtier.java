@@ -32,7 +32,7 @@ public class Courtier extends Thread{
     private PrintWriter out = null;
     private BufferedReader in = null;
 
-    String reponse = "";
+    private String[] reponse;
 
     /**
      *
@@ -60,23 +60,25 @@ public class Courtier extends Thread{
             serverSocket = new ServerSocket(serverPort);
             socketBourse = new Socket(hote, boursePort);
 
-            System.out.println("courtier " + nom + " est connecté à la bourse se trouvant sur " + socketBourse.getPort());
-            System.out.println("courtier " + nom + " est à l'écoute");
+            System.out.println("la bourse se trouve sur " + socketBourse.getPort());
 
             in = new BufferedReader(new InputStreamReader(socketBourse.getInputStream()));
             out = new PrintWriter(socketBourse.getOutputStream(), true);
 
-            System.out.println("envoi de mon ID à la bourse");
+            System.out.println("envoi de mon ID à la bourse (" + this.nom + ")");
             out.println(this.nom);
-            System.out.println("attente de l'autorisation par la bourse");
-            reponse = in.readLine();
-            System.out.println("reponse récue:" + reponse);
 
-            if (reponse.equals("accept")) {
+            System.out.println("attente de l'autorisation par la bourse");
+            reponse = in.readLine().split(" ");
+            afficherReponse();
+
+            if (reponse[0].equals("accept")) {
 
                 System.out.println("accés autorisé");
 
                 while (true) {
+                    System.out.println("courtier " + nom + " est en attente d'une connexion d'un client");
+
                     socketClient = serverSocket.accept();
                     ThreadClient threadClient = new ThreadClient(socketClient, this);
                     addClient(threadClient);
@@ -85,6 +87,7 @@ public class Courtier extends Thread{
 
                     this.afficherClientList();
                 }
+
             } else
                 System.out.println("accés refusé");
 
@@ -118,6 +121,11 @@ public class Courtier extends Thread{
         threadClient.start();
     }
 
+    public void removeClient(ThreadClient threadClient) {
+        if (!threadClient.isAlive())
+            clientList.remove(threadClient);
+    }
+
     public void afficherClientList() {
         for(ThreadClient threadClient : clientList){
             System.out.print(threadClient);
@@ -126,21 +134,40 @@ public class Courtier extends Thread{
     }
     @Override
     public String toString() {
-        return "nom: " + nom + "/nombreClient:" + clientList.size();
+        return "nom: " + nom + " nombreClient:" + clientList.size();
     }
 
     public String getNom() {
         return nom;
     }
 
+    private void afficherReponse() {
+        System.out.print("reponse:");
+
+        for (String string: reponse)
+            System.out.print(string + " ");
+
+        System.out.println();
+    }
+
     public static void main(String[] args) {
 
-        List<Courtier> courtiers = new ArrayList<>();
+        String nom = "Max";
+        double taux = 0.01;
+        int port = 4040;
 
-        courtiers.add(new Courtier("Max", 0.01, 4040));
+        if (args.length >= 3) {
+            nom = args[0];
+            taux = Double.parseDouble(args[1]);
+            port = Integer.parseInt(args[2]);
+        } else if (args.length == 2) {
+            nom = args[0];
+            taux = Double.parseDouble(args[1]);
+        } else if (args.length == 1)
+            nom = args[0];
 
-        for (Courtier courtier: courtiers)
-            courtier.start();
+        Courtier courtier = new Courtier(nom, taux, port);
+        courtier.start();
 
     }
 }

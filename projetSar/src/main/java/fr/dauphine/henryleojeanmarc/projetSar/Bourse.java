@@ -20,26 +20,56 @@ public class Bourse extends Thread {
 
 	private String nom;
 
-	public Bourse(String nom) {
+    public Bourse(String nom) {
         stockList = new ArrayList<>();
         courtierList = new ArrayList<>();
         commandeAchatList = new ArrayList<>();
         commandeVenteList = new ArrayList<>();
 
         this.nom = nom;
-	}
-	
+    }
+
+    public void run(){
+        try{
+            serverSocket = new ServerSocket(port); // socket d'ecoute
+            System.out.println("serveur ecoute");
+
+            while(true){
+                socket = serverSocket.accept();
+
+                System.out.println("courtier s'est connecté");
+
+                ThreadCourtier threadCourtier = new ThreadCourtier(socket, this);
+                addCourtier(threadCourtier);
+            }
+
+        } catch (IOException e) {
+            System.err.println("erreur : " +e);
+        } finally {
+            try {
+                socket.close();
+
+                System.out.println("serversocket de Bourse a été fermé");
+            } catch (IOException e){
+                System.err.println("erreur lors de la fermeture du serversocket de la Bourse");
+            }
+        }
+    }
+
 	public void afficherListStock(){
 		for(Stock stock: stockList){
-			System.out.print(stock);
+			System.out.println(stock);
 		}
 	}
+
 	public void afficherListCourtier(){
 		for(ThreadCourtier courtier: courtierList){
-			System.out.println(courtier);
+			System.out.print(courtier + " ");
 		}
+		System.out.println();
 	}
-	public int achatStock(Stock s){
+
+	private int achatStock(Stock s){
 		int res = 0;
 		for(Commande commande: commandeAchatList){
 			if(commande.getStock().getNom().equals(s.getNom())){
@@ -49,7 +79,7 @@ public class Bourse extends Thread {
 		return res;
 	}
 	
-	public int venteStock(Stock s){
+	private int venteStock(Stock s){
 		int res = 0;
 		for(Commande commande: commandeVenteList){
 			if(commande.getStock().getNom().equals(s.getNom())){
@@ -66,40 +96,6 @@ public class Bourse extends Thread {
 		}
 	}
 
-    public void run(){
-			try{
-				serverSocket = new ServerSocket(port); // socket d'ecoute
-				System.out.println("serveur ecoute");
-				
-				 while(true){
-				     socket = serverSocket.accept();
-				     System.out.println("courtier s'est connecté");
-				     ThreadCourtier threadCourtier = new ThreadCourtier(socket, this); // on donne la socket ssv
-                     addCourtier(threadCourtier);
-				 }
-			} catch (IOException e) {
-				System.err.println("erreur : " +e);
-			} finally {
-				try {
-					socket.close();
-
-					System.out.println("serversocket de Bourse a été fermé");
-				} catch (IOException e){
-					System.err.println("erreur lors de la fermeture du serversocket de la Bourse");
-				}
-		    }
-		
-	}
-
-	synchronized String afficherListEntreprises() {
-	    String result = "";
-
-	    for (Stock stock: stockList)
-	        result += stock.toString() + "\n";
-
-	    return result;
-    }
-
     public static int getPort() {
         return port;
     }
@@ -109,8 +105,19 @@ public class Bourse extends Thread {
 	    threadCourtier.start();
     }
 
+    synchronized private void removeCourtier(ThreadCourtier threadCourtier) {
+        if (!threadCourtier.isAlive())
+            courtierList.remove(threadCourtier);
+    }
+
     public static void main(String[] args) {
-	    Bourse bourse = new Bourse("CAC40");
-	    bourse.start();
+
+        String nom = "Max";
+
+        if (args.length >= 1)
+            nom = args[0];
+
+        Bourse bourse = new Bourse(nom);
+        bourse.start();
     }
 }
