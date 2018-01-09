@@ -80,6 +80,7 @@ public class Client extends Thread{
                 String str = scanner.nextLine();
                 while(true){
                 	if(str.equals("bye")){
+                		out.println(str);
                 		break;
                 	}
                 }
@@ -88,19 +89,19 @@ public class Client extends Thread{
             else {
                 System.out.println("le courtier " + nomCourtier + " a refusé la connexion");
             }
-
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        try {
-            in.close();
-            out.close();
-            socket.close();
-
-            System.out.println("les flux associés au client " + this.nom + " ont été fermés");
-        } catch (IOException e) {
-            System.err.println("erreur lors de la fermeture des flux de Client");
+        finally{
+	        try {
+	            in.close();
+	            out.close();
+	            socket.close();
+	
+	            System.out.println("les flux associés au client " + this.nom + " ont été fermés");
+	        } catch (IOException e) {
+	            System.err.println("erreur lors de la fermeture des flux de Client");
+	        }
         }
     }
 

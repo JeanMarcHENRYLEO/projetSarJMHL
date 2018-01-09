@@ -34,20 +34,19 @@ public class ThreadClient extends Thread {
         }
 
         try {
-            reponse = in.readLine().split(" ");
-            afficherReponse();
-            this.setName(reponse[0]);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+        reponse = in.readLine().split(" ");
+        afficherReponse();
+        this.setName(reponse[0]);
         requete = "accept " + courtier.getNom();
         out.println(this.getName() + ":" + requete);
         System.out.println(message);
         out.println(message);
         out.println(requete);
 
-        while (!reponse[0].equals("bye")) {
+        while (true) {
+        	if(reponse[0].equals("bye")){
+        		break;
+        	}
             try {
                 reponse = in.readLine().split(" ");
                 afficherReponse();
@@ -56,18 +55,21 @@ public class ThreadClient extends Thread {
                 e.printStackTrace();
             }
         }
-
-        try {
-            in.close();
-            out.close();
-            socket.close();
-
-            courtier.removeClient(this);
-
-            System.out.println("les flux de ThreadClient " + this.getName() + " ont été fermés");
+        System.out.println("on sort du while avec bye");
         } catch (IOException e) {
-            System.err.println("erreur lors de la fermeture des flux de ThreadClient");
-        }
+            e.printStackTrace();
+        }finally{
+	        try {
+	            in.close();
+	            out.close();
+	            socket.close();
+	            courtier.removeClient(this);
+	            courtier.FermeJournee();
+	            System.out.println("les flux de ThreadClient " + this.getName() + " ont été fermés");
+	        } catch (IOException e) {
+	            System.err.println("erreur lors de la fermeture des flux de ThreadClient");
+	        }
+       }
     }
 
     private void afficherReponse() {

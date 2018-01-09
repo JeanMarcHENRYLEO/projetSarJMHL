@@ -16,6 +16,7 @@ import java.util.List;
 
 public class Courtier extends Thread{
 	private boolean journeeFinie;
+	private boolean journeeCommencee;
 	private String nom;
     private double taux;
     private double espece;
@@ -50,7 +51,7 @@ public class Courtier extends Thread{
         this.clientList = new ArrayList<>();
         this.serverPort = serverPort;
         journeeFinie = false;
-
+        journeeCommencee=false;
         try {
             this.hote = InetAddress.getLocalHost();
         } catch (UnknownHostException e) {
@@ -75,7 +76,7 @@ public class Courtier extends Thread{
             System.out.println("envoi de mon ID à la bourse (" + this.nom + ")");
             out.println(this.nom);
             System.out.println("attente de l'autorisation par la bourse");
-           reponse = in.readLine().split(" ");
+            reponse = in.readLine().split(" ");
             /*String reponse = in.readLine();
             while(reponse.isEmpty()){
             	System.out.println("notyet");
@@ -86,31 +87,25 @@ public class Courtier extends Thread{
             if (reponse[0].equals("accept")) {
                 System.out.println("accés autorisé");
                 afficherReponse();
-
                 String a = in.readLine();
                 String message = "";
-
                 while(!a.isEmpty()){
                 	message += a + "\n";
                 	a = in.readLine();
                 }
-
 	            System.out.println(message);
                 while(true) {
+                    isFiniJournee();
+                    if(journeeFinie){
+                    	break;
+                    }
                     System.out.println("courtier " + nom + " est en attente d'une connexion d'un client");
-
                     socketClient = serverSocket.accept();
                     ThreadClient threadClient = new ThreadClient(socketClient, this,message);
                     addClient(threadClient);
                     sleep(2000);
-
                     this.afficherClientList();
-
-                    if(journeeFinie){
-                    	break;
-                    }
                 }
-
             } else
                 System.out.println("accés refusé");
         } catch(BindException b){
@@ -123,10 +118,10 @@ public class Courtier extends Thread{
         } finally {
             try {
                 socketBourse.close();
-               // socketClient.close();
+            	serverSocket.close();
+                socketClient.close();
                 in.close();
                 out.close();
-
                 System.out.println("les flux de courtier " + this.nom + " ont ete fermes");
             } catch (IOException e) {
                 System.err.println("erreur lors de la fermeture des flux de Courtiers");
@@ -139,6 +134,7 @@ public class Courtier extends Thread{
     }
 
     public void addClient(ThreadClient threadClient){
+    	journeeCommencee=true;
         clientList.add(threadClient);
 
         System.out.println(this.toString());
@@ -147,8 +143,9 @@ public class Courtier extends Thread{
     }
 
     public void removeClient(ThreadClient threadClient) {
-        if (!threadClient.isAlive())
+       // if (!threadClient.isAlive())
             clientList.remove(threadClient);
+            System.out.println("nbClient"+clientList.size());
     }
 
     public void afficherClientList() {
@@ -173,6 +170,32 @@ public class Courtier extends Thread{
             System.out.print(string + " ");
 
         System.out.println();
+    }
+    
+    public void isFiniJournee(){
+    	if(journeeCommencee && clientList.size()==0){
+    		System.out.println("la journne est finei");
+    		journeeFinie=true;
+    	}else{
+    		System.out.println("journeepas fini");
+    	}
+    }
+    
+    public void FermeJournee(){
+    	isFiniJournee();
+    	System.out.println(journeeFinie);
+    	if(journeeFinie){
+    		  try {
+                  socketBourse.close();
+              	  serverSocket.close();
+                  socketClient.close();
+                  in.close();
+                  out.close();
+                  System.out.println("les flux de courtier " + this.nom + " ont ete fermes");
+              } catch (IOException e) {
+                  System.err.println("erreur lors de la fermeture des flux de Courtiers");
+              }
+    	}
     }
 
     public static void main(String[] args) {
