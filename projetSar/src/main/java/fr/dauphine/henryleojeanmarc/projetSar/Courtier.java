@@ -74,11 +74,10 @@ public class Courtier extends Thread{
 
             in = new BufferedReader(new InputStreamReader(socketBourse.getInputStream()));
             out = new PrintWriter(socketBourse.getOutputStream(), true);
-
             System.out.println("envoi de mon ID à la bourse (" + this.nom + ")");
             out.println(this.nom);
-
             System.out.println("attente de l'autorisation par la bourse");
+           reponse = in.readLine().split(" ");
             /*String reponse = in.readLine();
             while(reponse.isEmpty()){
             	System.out.println("notyet");
@@ -86,7 +85,6 @@ public class Courtier extends Thread{
             }
             System.out.println("reponse récue:" + reponse);
             if (reponse.equals("accept")) {*/
-            String[] reponse = in.readLine().split(" ");
             if (reponse[0].equals("accept")) {
                 System.out.println("accés autorisé");
                 afficherReponse();

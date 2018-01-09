@@ -30,41 +30,35 @@ public class ThreadCourtier extends Thread {
             System.err.println("impossible d'initialiser les flux de sortie/entrée");
         }
 
-        try {
-            System.out.println("courtier connecté:" + reponse);
+       try {
             reponse = in.readLine().split(" ");
             this.setName(reponse[0]);
             System.out.println("courtier connecté:" + reponse[0]);
-        } catch (IOException e) {
+        //while (!reponse[0].equals("stop")) {
+            //reponse = in.readLine().split(" ");
+           // afficherReponse();
+            System.out.println("envoi de l'accept");
+            requete = "accept";
+            out.println(requete);
+            System.out.println("accept envoyé");
+            String ListStock=bourse.afficherListEntreprises();
+            System.out.println("Envoi Liste des Stocks");
+            System.out.println(ListStock);
+            out.println(ListStock);
+       } catch (IOException e) {
             e.printStackTrace();
-        }
-
-        System.out.println("envoi de l'accept");
-        requete = "accept";
-        out.println(requete);
-        System.out.println("accept envoyé");
-        String ListStock=bourse.afficherListEntreprises();
-        System.out.println("Envoi Liste des Stocks");
-        System.out.println(ListStock);
-        out.println(ListStock);
-
-        while (!reponse[0].equals("stop")) {
-            try {
-                reponse = in.readLine().split(" ");
-                afficherReponse();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        try {
-            in.close();
-            out.close();
-            socket.close();
-
-            System.out.println("les flux associés au ThreadCourtier " + this.toString() + " ont été fermés");
-        } catch (IOException e) {
-            System.err.println("erreur lors de la fermeture des flux");
-        }
+       }
+       // }
+      finally {
+    	  try{
+	          in.close();
+	          out.close();
+	          socket.close();
+          System.out.println("les flux associés au ThreadCourtier " + this.toString() + " ont été fermés");
+	      }catch (IOException e) {
+	            System.err.println("erreur lors de la fermeture des flux");
+	      }
+      }
     }
 
     private void afficherReponse() {

@@ -74,10 +74,8 @@ public class Bourse extends Thread {
 			try{
 				serverSocket = new ServerSocket(port); // socket d'ecoute
 				System.out.println("serveur ecoute");
-				
 				 while(true){
 				     socket = serverSocket.accept();
-				     System.out.println("courtier s'est connecté");
 				     ThreadCourtier threadCourtier = new ThreadCourtier(socket, this); // on donne la socket ssv
                      addCourtier(threadCourtier);
                      
