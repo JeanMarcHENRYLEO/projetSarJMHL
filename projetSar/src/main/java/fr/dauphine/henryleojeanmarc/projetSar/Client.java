@@ -9,6 +9,7 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class Client extends Thread{
     private String nom;
@@ -54,15 +55,27 @@ public class Client extends Thread{
         try {
             System.out.println("envoi de mon identifiant au courtier");
             out.println(nom);
-
             reponse = in.readLine().split(" ");
-            System.out.println(reponse);
-
             nomCourtier = reponse[1];
-
-            if (reponse[0].equals("accept")){
+            System.out.println(reponse[0]);
+            if (reponse[0].equals(nom+":accept")){
                 System.out.println("le courtier " + nomCourtier + " a accepté ma connexion");
-
+                System.out.println("voici les stocks disponibles :");
+                String tampon=in.readLine();
+                String message="";
+                while(!tampon.isEmpty()){
+                	message+=tampon+"\n";
+                	tampon =in.readLine();
+                }
+                System.out.println(message);
+                Scanner sc = new Scanner(System.in);
+                String str = sc.nextLine();
+                while(true){
+                	if(str.equals("bye")){
+                		break;
+                	}
+                }
+                System.out.println("sortiewhile");
 
             }
             else {
@@ -93,8 +106,13 @@ public class Client extends Thread{
     public static void main(String[] args) {
 
         List<Client> clients = new ArrayList<>();
-
-        clients.add(new Client("JeanMarc", 4040));
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Veuillez saisir votre nom :");
+        String str = sc.nextLine();
+        System.out.println("Veuillez un port entre 4000 et 6000 :");
+        String stp = sc.nextLine();
+        int port = Integer.parseInt(stp);
+        clients.add(new Client(str, port));
 
         for (Client client: clients)
             client.start();

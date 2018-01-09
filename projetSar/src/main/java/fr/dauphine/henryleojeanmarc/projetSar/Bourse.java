@@ -76,6 +76,7 @@ public class Bourse extends Thread {
 				     System.out.println("courtier s'est connecté");
 				     ThreadCourtier threadCourtier = new ThreadCourtier(socket, this); // on donne la socket ssv
                      addCourtier(threadCourtier);
+                     
 				 }
 			} catch (IOException e) {
 				System.err.println("erreur : " +e);
@@ -107,10 +108,18 @@ public class Bourse extends Thread {
     private void addCourtier(ThreadCourtier threadCourtier) {
 	    courtierList.add(threadCourtier);
 	    threadCourtier.start();
+	    afficherListCourtier();
+    }
+    
+    public void addStock(Stock s){
+    	stockList.add(s);
     }
 
     public static void main(String[] args) {
 	    Bourse bourse = new Bourse("CAC40");
+	    bourse.addStock(new Stock("Coca-Cola",20.0,10000,10000));
+	    bourse.addStock(new Stock("Wallmart",15.0,50000,50000));
+	    bourse.addStock(new Stock("Cisco",35.0,15000,15000));
 	    bourse.start();
     }
 }

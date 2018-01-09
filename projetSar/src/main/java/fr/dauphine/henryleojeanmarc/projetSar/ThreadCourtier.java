@@ -34,6 +34,7 @@ public class ThreadCourtier extends Thread {
             reponse = in.readLine();
             this.setName(reponse);
             System.out.println("courtier connecté:" + reponse);
+            
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -41,9 +42,11 @@ public class ThreadCourtier extends Thread {
         System.out.println("envoi de l'accept");
         requete = "accept";
         out.println(requete);
-
         System.out.println("accept envoyé");
-
+        String ListStock=bourse.afficherListEntreprises();
+        System.out.println("Envoi Liste des Stocks");
+        System.out.println(ListStock);
+        out.println(ListStock);
         try {
             in.close();
             out.close();

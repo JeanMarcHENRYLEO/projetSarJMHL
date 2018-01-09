@@ -16,10 +16,12 @@ public class ThreadClient extends Thread {
 
     private String requete = "";
     private String reponse = "";
+    private String message = "";
 
-    public ThreadClient(Socket socket, Courtier courtier) {
+    public ThreadClient(Socket socket, Courtier courtier,String message) {
         this.socket = socket;
         this.courtier = courtier;
+        this.message=message;
     }
 
     public void run() {
@@ -39,6 +41,8 @@ public class ThreadClient extends Thread {
 
         requete = "accept " + courtier.getNom();
         out.println(this.getName() + ":" + requete);
+        System.out.println(message);
+        out.println(message);
 
         try {
             in.close();
