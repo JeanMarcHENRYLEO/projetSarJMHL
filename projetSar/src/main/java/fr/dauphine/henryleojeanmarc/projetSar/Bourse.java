@@ -102,6 +102,14 @@ public class Bourse extends Thread {
 	    return result;
     }
 
+    synchronized void envoyerListeEntreprises(PrintWriter out) {
+        int counter = 1;
+
+        for (Stock stock: stockList)
+            out.println(counter++ + ": " + stock);
+
+    }
+
     public static int getPort() {
         return port;
     }
@@ -170,7 +178,7 @@ public class Bourse extends Thread {
     	stockList.add(s);
     }
 
-    synchronized private void removeCourtier(ThreadCourtier threadCourtier) {
+    synchronized public void removeCourtier(ThreadCourtier threadCourtier) {
         if (!threadCourtier.isAlive())
             courtierList.remove(threadCourtier);
     }

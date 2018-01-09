@@ -43,10 +43,11 @@ public class ThreadCourtier extends Thread {
             requete = "accept";
             out.println(requete);
             System.out.println("accept envoyé");
-            String ListStock=bourse.afficherListEntreprises();
-            System.out.println("Envoi Liste des Stocks");
+            String ListStock = bourse.afficherListEntreprises();
+            System.out.println("envoi liste des Stocks");
             System.out.println(ListStock);
             out.println(ListStock);
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -55,6 +56,9 @@ public class ThreadCourtier extends Thread {
                     in.close();
                     out.close();
                     socket.close();
+
+                    bourse.removeCourtier(this);
+
                     System.out.println("les flux associés au ThreadCourtier " + this.toString() + " ont été fermés");
                 }catch (IOException e) {
                     System.err.println("erreur lors de la fermeture des flux");

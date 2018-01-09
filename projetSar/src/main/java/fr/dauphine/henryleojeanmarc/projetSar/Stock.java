@@ -8,7 +8,7 @@ public class Stock {
 	private double prix;
 	int nbActionTotal;
 	int nbActionFlottant;
-	List<Commande>CommandeList=new ArrayList<Commande>();
+	List<Commande>CommandeList=new ArrayList<>();
 	
 	public Stock(String nom, double prix, int nbAT,int nbAF){
 		this.nom = nom;
