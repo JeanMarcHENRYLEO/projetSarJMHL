@@ -87,6 +87,7 @@ public class Courtier extends Thread{
             if (reponse.equals("accept")) {*/
 
             String[] reponse = in.readLine().split(" ");
+
             if (reponse[0].equals("accept")) {
                 System.out.println("accés autorisé");
                 afficherReponse();
@@ -100,7 +101,7 @@ public class Courtier extends Thread{
                 }
 
 	            System.out.println(message);
-                while (true) {
+                while(true) {
                     System.out.println("courtier " + nom + " est en attente d'une connexion d'un client");
 
                     socketClient = serverSocket.accept();
@@ -109,6 +110,7 @@ public class Courtier extends Thread{
                     sleep(2000);
 
                     this.afficherClientList();
+
                     if(journeeFinie){
                     	break;
                     }
