@@ -35,7 +35,7 @@ public class Courtier extends Thread{
     private PrintWriter out = null;
     private BufferedReader in = null;
 
-    String reponse = "";
+    private String[] reponse;
 
     /**
      *
@@ -69,16 +69,27 @@ public class Courtier extends Thread{
             in = new BufferedReader(new InputStreamReader(socketBourse.getInputStream()));
             out = new PrintWriter(socketBourse.getOutputStream(), true);
             System.out.println("envoi de mon ID à la bourse");
+
+            System.out.println("la bourse se trouve sur " + socketBourse.getPort());
+
+            in = new BufferedReader(new InputStreamReader(socketBourse.getInputStream()));
+            out = new PrintWriter(socketBourse.getOutputStream(), true);
+
+            System.out.println("envoi de mon ID à la bourse (" + this.nom + ")");
             out.println(this.nom);
+
             System.out.println("attente de l'autorisation par la bourse");
-            reponse = in.readLine();
+            /*String reponse = in.readLine();
             while(reponse.isEmpty()){
             	System.out.println("notyet");
             	sleep(500);
             }
             System.out.println("reponse récue:" + reponse);
-            if (reponse.equals("accept")) {
+            if (reponse.equals("accept")) {*/
+            String[] reponse = in.readLine().split(" ");
+            if (reponse[0].equals("accept")) {
                 System.out.println("accés autorisé");
+                afficherReponse();
                 String a=in.readLine();
                 String message="";
                 while(!a.isEmpty()){
@@ -87,6 +98,8 @@ public class Courtier extends Thread{
                 }
 	            System.out.println(message);
                 while (true) {
+                    System.out.println("courtier " + nom + " est en attente d'une connexion d'un client");
+
                     socketClient = serverSocket.accept();
                     ThreadClient threadClient = new ThreadClient(socketClient, this,message);
                     addClient(threadClient);
@@ -97,6 +110,7 @@ public class Courtier extends Thread{
                     	break;
                     }
                 }
+
             } else
                 System.out.println("accés refusé");
         } catch(BindException b){
@@ -132,6 +146,11 @@ public class Courtier extends Thread{
         threadClient.start();
     }
 
+    public void removeClient(ThreadClient threadClient) {
+        if (!threadClient.isAlive())
+            clientList.remove(threadClient);
+    }
+
     public void afficherClientList() {
         for(ThreadClient threadClient : clientList){
             System.out.print(threadClient);
@@ -140,7 +159,7 @@ public class Courtier extends Thread{
     }
     @Override
     public String toString() {
-        return "nom: " + nom + "/nombreClient:" + clientList.size();
+        return "nom: " + nom + " nombreClient:" + clientList.size();
     }
 
     public String getNom() {
@@ -148,9 +167,31 @@ public class Courtier extends Thread{
     }
     
 
-    public static void main(String[] args) {
+    private void afficherReponse() {
+        System.out.print("reponse:");
+        for (String string: reponse)
+            System.out.print(string + " ");
 
-        List<Courtier> courtiers = new ArrayList<>();
+        System.out.println();
+    }
+
+    public static void main(String[] args) {
+    	
+        String nom = "Max";
+        double taux = 0.01;
+        int port = 4040;
+        if (args.length >= 3) {
+            nom = args[0];
+            taux = Double.parseDouble(args[1]);
+            port = Integer.parseInt(args[2]);
+        } else if (args.length == 2) {
+            nom = args[0];
+            taux = Double.parseDouble(args[1]);
+        } else if (args.length == 1)
+            nom = args[0];
+        Courtier courtier = new Courtier(nom, taux, port);
+        courtier.start();
+        /*List<Courtier> courtiers = new ArrayList<>();
         Scanner sc = new Scanner(System.in);
         System.out.println("Veuillez saisir votre nom :");
         String str = sc.nextLine();
@@ -159,8 +200,7 @@ public class Courtier extends Thread{
         int port = Integer.parseInt(stp);
         courtiers.add(new Courtier(str, 0.01,port));
         for (Courtier courtier: courtiers)
-            courtier.start();
-
+            courtier.start();*/
     }
 }
 

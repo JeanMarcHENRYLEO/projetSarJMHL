@@ -47,15 +47,16 @@ public class Client extends Thread{
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream(), true);
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("erreur lors de la initialisation des flux");
         }
 
         System.out.println("les flux ont été initialisés");
 
         try {
-            System.out.println("envoi de mon identifiant au courtier");
+            System.out.println("envoi de mon identifiant au courtier (" + this.nom + ")");
             out.println(nom);
             reponse = in.readLine().split(" ");
+            System.out.println(reponse[0]);
             nomCourtier = reponse[1];
             System.out.println(reponse[0]);
             if (reponse[0].equals(nom+":accept")){
@@ -77,6 +78,9 @@ public class Client extends Thread{
                 }
                 System.out.println("sortiewhile");
 
+                while (true) {
+
+                }
             }
             else {
                 System.out.println("le courtier " + nomCourtier + " a refusé la connexion");
@@ -104,18 +108,23 @@ public class Client extends Thread{
     }
 
     public static void main(String[] args) {
-
-        List<Client> clients = new ArrayList<>();
+        /*List<Client> clients = new ArrayList<>();
         Scanner sc = new Scanner(System.in);
         System.out.println("Veuillez saisir votre nom :");
         String str = sc.nextLine();
         System.out.println("Veuillez un port entre 4000 et 6000 :");
         String stp = sc.nextLine();
         int port = Integer.parseInt(stp);
-        clients.add(new Client(str, port));
-
-        for (Client client: clients)
-            client.start();
+        clients.add(new Client(str, port));*/
+        String nom = "Marie";
+        int port = 4040;
+        if (args.length >= 2) {
+            nom = args[0];
+            port = Integer.parseInt(args[1]);
+        } else if (args.length == 1)
+            nom = args[0];
+        Client client = new Client(nom, port);
+        client.start();
     }
 }
 

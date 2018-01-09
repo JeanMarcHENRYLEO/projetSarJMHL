@@ -15,8 +15,9 @@ public class ThreadClient extends Thread {
     private PrintWriter out;
 
     private String requete = "";
-    private String reponse = "";
+    //private String reponse = "";
     private String message = "";
+    private String[] reponse;
 
     public ThreadClient(Socket socket, Courtier courtier,String message) {
         this.socket = socket;
@@ -29,12 +30,13 @@ public class ThreadClient extends Thread {
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream(), true);
         } catch (IOException e) {
-            System.err.println("Impossible d'initialiser les flux de sortie/entrée");
+            System.err.println("impossible d'initialiser les flux de sortie/entrée");
         }
 
         try {
-            reponse = in.readLine();
-            this.setName(reponse);
+            reponse = in.readLine().split(" ");
+            afficherReponse();
+            this.setName(reponse[0]);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -43,16 +45,38 @@ public class ThreadClient extends Thread {
         out.println(this.getName() + ":" + requete);
         System.out.println(message);
         out.println(message);
+        out.println(requete);
+
+        while (!reponse[0].equals("bye")) {
+            try {
+                reponse = in.readLine().split(" ");
+                afficherReponse();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
 
         try {
             in.close();
             out.close();
             socket.close();
 
+            courtier.removeClient(this);
+
             System.out.println("les flux de ThreadClient " + this.getName() + " ont été fermés");
         } catch (IOException e) {
             System.err.println("erreur lors de la fermeture des flux de ThreadClient");
         }
+    }
+
+    private void afficherReponse() {
+        System.out.print("reponse:");
+
+        for (String string: reponse)
+            System.out.print(string + " ");
+
+        System.out.println();
     }
 
     @Override

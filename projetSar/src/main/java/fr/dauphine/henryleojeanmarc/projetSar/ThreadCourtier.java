@@ -15,7 +15,7 @@ public class ThreadCourtier extends Thread {
     private PrintWriter out;
 
     private String requete = "";
-    private String reponse = "";
+    private String[] reponse;
 
     public ThreadCourtier(Socket socket, Bourse bourse) {
         this.bourse = bourse;
@@ -31,10 +31,10 @@ public class ThreadCourtier extends Thread {
         }
 
         try {
-            reponse = in.readLine();
-            this.setName(reponse);
             System.out.println("courtier connecté:" + reponse);
-            
+            reponse = in.readLine().split(" ");
+            this.setName(reponse[0]);
+            System.out.println("courtier connecté:" + reponse[0]);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -47,6 +47,15 @@ public class ThreadCourtier extends Thread {
         System.out.println("Envoi Liste des Stocks");
         System.out.println(ListStock);
         out.println(ListStock);
+
+        while (!reponse[0].equals("stop")) {
+            try {
+                reponse = in.readLine().split(" ");
+                afficherReponse();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         try {
             in.close();
             out.close();
@@ -56,6 +65,14 @@ public class ThreadCourtier extends Thread {
         } catch (IOException e) {
             System.err.println("erreur lors de la fermeture des flux");
         }
+    }
+
+    private void afficherReponse() {
+        System.out.print("reponse:");
+
+        for (String string : reponse)
+            System.out.print(string + " ");
+        System.out.println();
     }
 
     @Override

@@ -20,26 +20,30 @@ public class Bourse extends Thread {
 
 	private String nom;
 
-	public Bourse(String nom) {
+    public Bourse(String nom) {
         stockList = new ArrayList<>();
         courtierList = new ArrayList<>();
         commandeAchatList = new ArrayList<>();
         commandeVenteList = new ArrayList<>();
 
         this.nom = nom;
-	}
-	
+    }
+
+
 	public void afficherListStock(){
 		for(Stock stock: stockList){
-			System.out.print(stock);
+			System.out.println(stock);
 		}
 	}
+
 	public void afficherListCourtier(){
 		for(ThreadCourtier courtier: courtierList){
-			System.out.println(courtier);
+			System.out.print(courtier + " ");
 		}
+		System.out.println();
 	}
-	public int achatStock(Stock s){
+
+	private int achatStock(Stock s){
 		int res = 0;
 		for(Commande commande: commandeAchatList){
 			if(commande.getStock().getNom().equals(s.getNom())){
@@ -49,7 +53,7 @@ public class Bourse extends Thread {
 		return res;
 	}
 	
-	public int venteStock(Stock s){
+	private int venteStock(Stock s){
 		int res = 0;
 		for(Commande commande: commandeVenteList){
 			if(commande.getStock().getNom().equals(s.getNom())){
@@ -101,6 +105,7 @@ public class Bourse extends Thread {
 	    return result;
     }
 
+
     public static int getPort() {
         return port;
     }
@@ -115,11 +120,25 @@ public class Bourse extends Thread {
     	stockList.add(s);
     }
 
+    synchronized private void removeCourtier(ThreadCourtier threadCourtier) {
+        if (!threadCourtier.isAlive())
+            courtierList.remove(threadCourtier);
+    }
+
     public static void main(String[] args) {
 	    Bourse bourse = new Bourse("CAC40");
 	    bourse.addStock(new Stock("Coca-Cola",20.0,10000,10000));
 	    bourse.addStock(new Stock("Wallmart",15.0,50000,50000));
 	    bourse.addStock(new Stock("Cisco",35.0,15000,15000));
 	    bourse.start();
+	    /*
+        String nom = "Max";
+
+        if (args.length >= 1)
+            nom = args[0];
+
+        Bourse bourse = new Bourse(nom);
+        bourse.start();*/
+
     }
 }

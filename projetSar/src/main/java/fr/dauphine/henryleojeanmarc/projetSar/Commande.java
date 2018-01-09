@@ -7,61 +7,23 @@ public class Commande {
 	private int nbAction;
 	private Client client;
 	private Courtier courtier;
-	
-	public Commande(boolean ac,double p,Stock s,int nba,Client c,Courtier cr){
-		achat=ac;
-		prix=p;
-		stock=s;
-		client=c;
-		courtier=cr;
+
+	public Commande(boolean achat, double prix, Stock stock, int nbAction) {
+		this.achat = achat;
+		this.prix = prix;
+		this.stock = stock;
+		this.nbAction = nbAction;
 	}
 
 	public boolean isAchat() {
 		return achat;
 	}
 
-	public void setAchat(boolean achat) {
-		this.achat = achat;
-	}
+    public Stock getStock() {
+        return stock;
+    }
 
-	public double getPrix() {
-		return prix;
-	}
-
-	public void setPrix(double prix) {
-		this.prix = prix;
-	}
-
-	public Stock getStock() {
-		return stock;
-	}
-
-	public void setStock(Stock stock) {
-		this.stock = stock;
-	}
-
-	public int getNbAction() {
-		return nbAction;
-	}
-
-	public void setNbAction(int nbAction) {
-		this.nbAction = nbAction;
-	}
-
-	public Client getClient() {
-		return client;
-	}
-
-	public void setClient(Client client) {
-		this.client = client;
-	}
-
-	public Courtier getCourtier() {
-		return courtier;
-	}
-
-	public void setCourtier(Courtier courtier) {
-		this.courtier = courtier;
-	}
-
+    public int getNbAction() {
+        return nbAction;
+    }
 }
