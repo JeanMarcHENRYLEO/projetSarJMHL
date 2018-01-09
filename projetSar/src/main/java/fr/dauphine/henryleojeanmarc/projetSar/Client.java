@@ -108,21 +108,27 @@ public class Client extends Thread{
     }
 
     public static void main(String[] args) {
-        /*List<Client> clients = new ArrayList<>();
+        /*
+        List<Client> clients = new ArrayList<>();
         Scanner sc = new Scanner(System.in);
         System.out.println("Veuillez saisir votre nom :");
         String str = sc.nextLine();
         System.out.println("Veuillez un port entre 4000 et 6000 :");
         String stp = sc.nextLine();
         int port = Integer.parseInt(stp);
-        clients.add(new Client(str, port));*/
+        clients.add(new Client(str, port));
+        */
+
         String nom = "Marie";
+
         int port = 4040;
+
         if (args.length >= 2) {
             nom = args[0];
             port = Integer.parseInt(args[1]);
         } else if (args.length == 1)
             nom = args[0];
+
         Client client = new Client(nom, port);
         client.start();
     }

@@ -126,19 +126,17 @@ public class Bourse extends Thread {
     }
 
     public static void main(String[] args) {
-	    Bourse bourse = new Bourse("CAC40");
-	    bourse.addStock(new Stock("Coca-Cola",20.0,10000,10000));
-	    bourse.addStock(new Stock("Wallmart",15.0,50000,50000));
-	    bourse.addStock(new Stock("Cisco",35.0,15000,15000));
-	    bourse.start();
-	    /*
-        String nom = "Max";
+        String nom = "CAC40";
 
         if (args.length >= 1)
             nom = args[0];
 
         Bourse bourse = new Bourse(nom);
-        bourse.start();*/
+		bourse.addStock(new Stock("Coca-Cola",20.0,10000,10000));
+		bourse.addStock(new Stock("Wallmart",15.0,50000,50000));
+		bourse.addStock(new Stock("Cisco",35.0,15000,15000));
+
+		bourse.start();
 
     }
 }
