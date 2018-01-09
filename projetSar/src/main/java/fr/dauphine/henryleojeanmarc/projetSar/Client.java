@@ -24,6 +24,8 @@ public class Client extends Thread{
     private String[] reponse;
     private String nomCourtier;
 
+    private Scanner scanner;
+
     public Client(String nom, int port) {
         this.nom = nom;
         this.port = port;
@@ -32,6 +34,8 @@ public class Client extends Thread{
         } catch (UnknownHostException e) {
             System.err.println("Impossible d'initialiser le hote");
         }
+
+        this.scanner = new Scanner(System.in);
     }
 
     public void run() {
@@ -56,9 +60,12 @@ public class Client extends Thread{
             System.out.println("envoi de mon identifiant au courtier (" + this.nom + ")");
             out.println(nom);
             reponse = in.readLine().split(" ");
-            System.out.println(reponse[0]);
+
             nomCourtier = reponse[1];
-            System.out.println(reponse[0]);
+
+            afficherReponse();
+
+
             if (reponse[0].equals(nom+":accept")){
                 System.out.println("le courtier " + nomCourtier + " a accepté ma connexion");
                 System.out.println("voici les stocks disponibles :");
@@ -69,18 +76,14 @@ public class Client extends Thread{
                 	tampon =in.readLine();
                 }
                 System.out.println(message);
-                Scanner sc = new Scanner(System.in);
-                String str = sc.nextLine();
+
+                String str = scanner.nextLine();
                 while(true){
                 	if(str.equals("bye")){
                 		break;
                 	}
                 }
                 System.out.println("sortiewhile");
-
-                while (true) {
-
-                }
             }
             else {
                 System.out.println("le courtier " + nomCourtier + " a refusé la connexion");
@@ -101,6 +104,15 @@ public class Client extends Thread{
         }
     }
 
+    private void afficherReponse() {
+        System.out.print("reponse:");
+
+        for (String string: reponse)
+            System.out.print(string + " ");
+
+        System.out.println();
+    }
+
 
     @Override
     public String toString() {
@@ -108,21 +120,27 @@ public class Client extends Thread{
     }
 
     public static void main(String[] args) {
-        /*List<Client> clients = new ArrayList<>();
+        /*
+        List<Client> clients = new ArrayList<>();
         Scanner sc = new Scanner(System.in);
         System.out.println("Veuillez saisir votre nom :");
         String str = sc.nextLine();
         System.out.println("Veuillez un port entre 4000 et 6000 :");
         String stp = sc.nextLine();
         int port = Integer.parseInt(stp);
-        clients.add(new Client(str, port));*/
+        clients.add(new Client(str, port));
+        */
+
         String nom = "Marie";
+
         int port = 4040;
+
         if (args.length >= 2) {
             nom = args[0];
             port = Integer.parseInt(args[1]);
         } else if (args.length == 1)
             nom = args[0];
+
         Client client = new Client(nom, port);
         client.start();
     }

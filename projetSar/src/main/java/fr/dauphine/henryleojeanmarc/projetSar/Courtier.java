@@ -12,11 +12,10 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 
 public class Courtier extends Thread{
-	boolean journeeFinie;
+	private boolean journeeFinie;
 	private String nom;
     private double taux;
     private double espece;
@@ -49,8 +48,8 @@ public class Courtier extends Thread{
         this.espece = 0;
         this.commandeList = new ArrayList<>();
         this.clientList = new ArrayList<>();
-        this.serverPort=serverPort;
-        journeeFinie=false;
+        this.serverPort = serverPort;
+        journeeFinie = false;
 
         try {
             this.hote = InetAddress.getLocalHost();
@@ -61,7 +60,6 @@ public class Courtier extends Thread{
 
     public void run() {
         try {
-        	
             serverSocket = new ServerSocket(serverPort);
             socketBourse = new Socket(hote, boursePort);
             System.out.println("courtier " + nom + " est connecté à la bourse se trouvant sur " + socketBourse.getPort());
@@ -88,14 +86,17 @@ public class Courtier extends Thread{
             if (reponse[0].equals("accept")) {
                 System.out.println("accés autorisé");
                 afficherReponse();
-                String a=in.readLine();
-                String message="";
+
+                String a = in.readLine();
+                String message = "";
+
                 while(!a.isEmpty()){
-                	message+=a+"\n";
-                	a =in.readLine();
+                	message += a + "\n";
+                	a = in.readLine();
                 }
+
 	            System.out.println(message);
-                while (true) {
+                while(true) {
                     System.out.println("courtier " + nom + " est en attente d'une connexion d'un client");
 
                     socketClient = serverSocket.accept();
@@ -104,6 +105,7 @@ public class Courtier extends Thread{
                     sleep(2000);
 
                     this.afficherClientList();
+
                     if(journeeFinie){
                     	break;
                     }
@@ -178,6 +180,7 @@ public class Courtier extends Thread{
         String nom = "Max";
         double taux = 0.01;
         int port = 4040;
+
         if (args.length >= 3) {
             nom = args[0];
             taux = Double.parseDouble(args[1]);
@@ -187,9 +190,12 @@ public class Courtier extends Thread{
             taux = Double.parseDouble(args[1]);
         } else if (args.length == 1)
             nom = args[0];
+
         Courtier courtier = new Courtier(nom, taux, port);
         courtier.start();
-        /*List<Courtier> courtiers = new ArrayList<>();
+
+        /*
+        List<Courtier> courtiers = new ArrayList<>();
         Scanner sc = new Scanner(System.in);
         System.out.println("Veuillez saisir votre nom :");
         String str = sc.nextLine();
@@ -198,7 +204,8 @@ public class Courtier extends Thread{
         int port = Integer.parseInt(stp);
         courtiers.add(new Courtier(str, 0.01,port));
         for (Courtier courtier: courtiers)
-            courtier.start();*/
+            courtier.start();
+        */
     }
 }
 
