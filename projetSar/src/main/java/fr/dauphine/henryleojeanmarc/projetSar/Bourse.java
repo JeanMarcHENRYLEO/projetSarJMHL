@@ -29,7 +29,6 @@ public class Bourse extends Thread {
         this.nom = nom;
     }
 
-
 	public void afficherListStock(){
 		for(Stock stock: stockList){
 			System.out.println(stock);
