@@ -29,38 +29,18 @@ public class Stock {
 		this.prix = prix;
 	}
 
+	public int getNbActionTotal() {
+		return nbActionTotal;
+	}
+
 	public int getNbActionFlottant() {
 		return nbActionFlottant;
-	}
-
-	public void setNbActionFlottant(int nbActionFlottant) {
-		this.nbActionFlottant = nbActionFlottant;
-	}
-
-	public List<Commande> getCommandeList() {
-		return CommandeList;
-	}
-
-	public void setCommandeList(List<Commande> commandeList) {
-		CommandeList = commandeList;
-	}
-
-	public Commande getCommande(int i) {
-	    return CommandeList.get(i);
-    }
-
-    public void setCommande(Commande commande) {
-	    this.CommandeList.add(commande);
-    }
-
-	public void addCommande(Commande commande){
-		CommandeList.add(commande);
 	}
 	
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub
-		return nom + ": action : " + prix + "/ ActionTot :" + nbActionTotal + "/ ActionFlottantes " + nbActionFlottant;
+		return nom + " P: " + prix + " AT: " + nbActionTotal + " AF: " + nbActionFlottant;
 	}
 }
 

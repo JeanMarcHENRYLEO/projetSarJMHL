@@ -1,12 +1,10 @@
 package fr.dauphine.henryleojeanmarc.projetSar;
 
-import java.io.IOException;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class Bourse extends Thread {
 	private List<Stock> stockList;
@@ -19,6 +17,8 @@ public class Bourse extends Thread {
 	private static final int port = 1234;
 
 	private String nom;
+
+    private String namefile = "stock";
 
     public Bourse(String nom) {
         stockList = new ArrayList<>();
@@ -102,9 +102,62 @@ public class Bourse extends Thread {
 	    return result;
     }
 
-
     public static int getPort() {
         return port;
+    }
+
+    private void ecrireFile() {
+        BufferedWriter bufferedWriter = null;
+
+        try {
+            bufferedWriter = new BufferedWriter(new FileWriter(new File(namefile)));
+
+            for (Stock stock: stockList)
+                bufferedWriter.write(stock.getNom() + "," + stock.getPrix() + "," + stock.getNbActionTotal() + "," + stock.getNbActionFlottant() +"\n");
+
+            bufferedWriter.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void lireFile() {
+        BufferedReader bufferedReader = null;
+        String line;
+
+        String[] lineArray;
+        String nom;
+        double prix;
+        int nbAT;
+        int nbAF;
+
+        try {
+            bufferedReader = new BufferedReader(new FileReader(new File(namefile)));
+
+            while ((line = bufferedReader.readLine()) != null) {
+
+                lineArray = line.split(",");
+
+                nom = lineArray[0];
+                prix = Double.parseDouble(lineArray[1]);
+                nbAT = Integer.parseInt(lineArray[2]);
+                nbAF = Integer.parseInt(lineArray[3]);
+
+                Stock stock = new Stock(nom, prix, nbAT, nbAF);
+
+                this.addStock(stock);
+
+                System.out.println("entreprise: " + stock + " added");
+            }
+
+            bufferedReader.close();
+
+        } catch (FileNotFoundException e) {
+            System.err.println("fichier " + namefile + " non trouvé");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void addCourtier(ThreadCourtier threadCourtier) {
@@ -129,11 +182,17 @@ public class Bourse extends Thread {
             nom = args[0];
 
         Bourse bourse = new Bourse(nom);
-		bourse.addStock(new Stock("Coca-Cola",20.0,10000,10000));
-		bourse.addStock(new Stock("Wallmart",15.0,50000,50000));
-		bourse.addStock(new Stock("Cisco",35.0,15000,15000));
 
-		bourse.start();
+        bourse.lireFile();
 
-    }
+        bourse.start();
+		try {
+			bourse.join();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+
+        bourse.ecrireFile();
+
+	}
 }
